@@ -22,7 +22,7 @@
         ],
         "psr-4": {
             "App\\": "app/",
-            "ShipFast\\": "src/"
+            "FastShip\\": "src/"
         }
     },
     "autoload-dev": {

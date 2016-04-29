@@ -9,12 +9,18 @@
 namespace FastShip\Repositories;
 
 use FastShip\Models\ParcelEloquentModel;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 
 class EloquentParcelRepository implements ParcelRepository
 {
     public function findByTrackingCode($code)
     {
-        return ParcelEloquentModel::where('trackingCode', $code)->firstOrFail();
+        try {
+            $parcel = ParcelEloquentModel::where('tracking_code', $code)->firstOrFail();
+        } catch (ModelNotFoundException $e) {
+            return null;
+        }
+        return $parcel;
     }
 }

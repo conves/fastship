@@ -11,6 +11,8 @@
 |
 */
 
+Route::resource('shipping', 'ShippingController');
+
 Route::get('/', function () {
     return view('welcome');
 });

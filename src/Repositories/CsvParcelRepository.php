@@ -10,6 +10,7 @@ namespace FastShip\Repositories;
 
 use League\Csv\Reader;
 use FastShip\Models\ParcelCsv;
+use Illuminate\Support\Facades\Config;
 
 
 class CsvParcelRepository implements ParcelRepository
@@ -19,11 +20,11 @@ class CsvParcelRepository implements ParcelRepository
      */
     private function csvReader()
     {
-        $csvPath = env('DB_DATABASE');
+        $csvPath = base_path().'/src/storage.csv';
 
         return Reader::createFromPath(
             new \SplFileObject($csvPath)
-        )->setDelimiter(';');
+        );
     }
 
     /**
@@ -32,25 +33,23 @@ class CsvParcelRepository implements ParcelRepository
      */
     public function findByTrackingCode($code)
     {
-        return $this->csvReader()
+        $csvRecord = $this->csvReader()
             ->addFilter(function ($row) {
-                return isset($row[1], $row[2], $row[3]); // We make sure the data are present
+                return isset($row[0], $row[1], $row[2]); // We make sure the data are present
             })
             ->addFilter(function ($row) use ($code) {
-                return $code == $row[2]; // We are looking for the the code
+                return $code == $row[1]; // We are looking for the the code
             })
-            ->setLimit(1) // We just want the first result
-            ->fetchAssoc(['id', 'trackingCode', 'deliveryDate'], function ($record) {
+            ->fetchOne(0);
 
-                $parcel = new ParcelCsv(); // Instantiate model
+        if ($csvRecord) {
+            $parcel = new ParcelCsv();
+            $parcel->id = $csvRecord[0];
+            $parcel->trackingCode = $csvRecord[1];
+            $parcel->deliveryDate = $csvRecord[2];
+            return $parcel;
+        }
 
-                foreach ($record as $key => $value) {
-                    if (property_exists('FastShip\Models\Parcel', $key)) {
-                        $parcel->$key = $value;
-                    }
-                }
-
-                return $parcel;
-            });
+        return null;
     }
 }

@@ -2,12 +2,26 @@
 
 namespace App\Http\Controllers;
 
+use FastShip\Repositories\EloquentParcelRepository;
+use FastShip\Repositories\CsvParcelRepository;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
 
 class ShippingController extends Controller
 {
+    private $repository;
+
+    /**
+     * ShippingController constructor.
+     *
+     * @param EloquentParcelRepository $repository
+     */
+    public function __construct(CsvParcelRepository $repository) {
+
+        $this->repository = $repository;
+
+    }
     /**
      * Display a listing of the resource.
      *
@@ -42,12 +56,12 @@ class ShippingController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  string  $code
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($code)
     {
-        //
+        return $this->repository->findByTrackingCode($code);
     }
 
     /**
