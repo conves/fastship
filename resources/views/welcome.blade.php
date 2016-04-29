@@ -1,45 +1,67 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Laravel</title>
+        <title>FastShip</title>
 
-        <link href="https://fonts.googleapis.com/css?family=Lato:100" rel="stylesheet" type="text/css">
+        <!-- Latest compiled and minified CSS -->
+        <link rel="stylesheet"
+              href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"
+              integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7"
+              crossorigin="anonymous"
+        >
 
-        <style>
-            html, body {
-                height: 100%;
-            }
-
-            body {
-                margin: 0;
-                padding: 0;
-                width: 100%;
-                display: table;
-                font-weight: 100;
-                font-family: 'Lato';
-            }
-
-            .container {
-                text-align: center;
-                display: table-cell;
-                vertical-align: middle;
-            }
-
-            .content {
-                text-align: center;
-                display: inline-block;
-            }
-
-            .title {
-                font-size: 96px;
-            }
-        </style>
+        <link rel="stylesheet"
+              href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.css"
+        >
     </head>
     <body>
         <div class="container">
-            <div class="content">
-                <div class="title">Laravel 5</div>
+            <div class="row">
+                <div class="col-md-4 col-md-offset-4">
+                    <h4>Enter your tracking code bellow:</h4>
+                    <div class="input-group">
+                        <input type="text" name="trackingCode" class="form-control" placeholder="Search for tracking code...">
+                    <span class="input-group-btn">
+                        <button id="search" class="btn btn-default" type="button">Find!</button>
+                    </span>
+                    </div><!-- /input-group -->
+                </div>
             </div>
         </div>
     </body>
+
+    <!-- jQuery -->
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
+
+    <!-- jQuery rest -->
+    <script src="http://jpillora.com/jquery.rest/dist/1/jquery.rest.min.js"></script>
+
+    <!-- Sweetalert -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.js"></script>
+
+    <!-- Latest compiled and minified Bootstrap JavaScript -->
+    <script
+        src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"
+        integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS"
+        crossorigin="anonymous"
+    ></script>
+
+    <script type="text/javascript">
+        var client = new $.RestClient('/');
+        client.add('shipping');
+        $(document).on("click", "#search", function() {
+            var trackingCodeInput = $("input[name='trackingCode']");
+            var trackingCode = trackingCodeInput.val();
+            var request = client.shipping.read(trackingCode);
+            request.done(function (data, textStatus, xhrObject){
+                $("input[name='trackingCode']").val("");
+                if (data != 0) {
+                    swal(data.deliveryDate, 'This is the delivery date for parcel no. ' + trackingCode, "success");
+                } else {
+                    swal('Nothing found!', 'Parcel code (' + trackingCode + ') seems to be invalid!', "warning");
+                }
+            });
+        });
+    </script>
+
 </html>

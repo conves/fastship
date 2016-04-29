@@ -60,7 +60,9 @@ class ShippingController extends Controller
      */
     public function show($code)
     {
-        return $this->repository->findByTrackingCode($code);
+        $parcel = $this->repository->findByTrackingCode($code);
+
+        return $parcel ? : 0;
     }
 
     /**
