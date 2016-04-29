@@ -1,10 +1,10 @@
 <?php
 
-namespace App;
+namespace FastShip\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Parcel extends Model
+class ParcelEloquentModel extends Model implements Parcel
 {
     /**
      * The table associated with the model.

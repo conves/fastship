@@ -8,10 +8,13 @@
 
 namespace FastShip\Repositories;
 
+use FastShip\Models\ParcelEloquentModel;
+
 
 class EloquentParcelRepository implements ParcelRepository
 {
-    public function findByTrackingCode($code) {
-
+    public function findByTrackingCode($code)
+    {
+        return ParcelEloquentModel::where('trackingCode', $code)->firstOrFail();
     }
 }
