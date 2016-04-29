@@ -2,8 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use FastShip\Repositories\EloquentParcelRepository;
-use FastShip\Repositories\CsvParcelRepository;
+use FastShip\Repositories\ParcelRepository;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
@@ -15,9 +14,9 @@ class ShippingController extends Controller
     /**
      * ShippingController constructor.
      *
-     * @param EloquentParcelRepository $repository
+     * @param ParcelRepository $repository
      */
-    public function __construct(CsvParcelRepository $repository) {
+    public function __construct(ParcelRepository $repository) {
 
         $this->repository = $repository;
 

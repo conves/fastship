@@ -1,6 +1,6 @@
 <?php
 return [
 
-    'storage' => env('csv_file', 'sqlite'),
+    'storage' => env('STORAGE', 'sqlite'),
 
 ];
